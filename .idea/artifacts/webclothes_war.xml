@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="webclothes:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>webclothes</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="webclothes-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="webclothes:war exploded" />
+    </root>
+  </artifact>
+</component>
