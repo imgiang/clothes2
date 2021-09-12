@@ -19,6 +19,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
+    <%-- giang  --%>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css" />
+
+
+    <%--giang--%>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <style>
@@ -26,6 +33,13 @@
             height: 500px;
 
         }
+
+        /*giang*/
+        [class*='mdl-shadow']{
+            box-shadow: none;
+        }
+        /*giang*/
+
         .mau{
             background-color: #929FBA;
         }
@@ -72,8 +86,51 @@
                 </ul>
                 <form class="d-flex" style="margin-top: 1px; margin-bottom: 1px;" >
                     <button class="btn hover" type="submit"><span><img src="./assets/shopping-cart.png" style="width: 25px; margin-right: 10px"></span></button>
-                    <button class="btn btn-outline-success" type="submit">Login</button>
+<%--                    giang--%>
+<%--                    <button class="btn btn-outline-success" type="submit" id="login" formaction="/login.jsp">Login</button>--%>
+                    <button id="login" type="button" class="guest btn btn-primary ms-3 d-none" data-bs-toggle="modal" data-bs-target="#modal-login"><span>Login</span></button>
+                    <div id="login-spinner" class="spinner-border text-light ms-3" role="status"></div>
+                    <div class="dropdown">
+                        <img id="avatar" th:src="@{/assets/avatar.jpg}" src="./assets/avatar.jpg" data-bs-toggle="dropdown" width="38x" height="38x"
+                             class="user avatar rounded-circle ms-3 d-none dropdown-toggle">
+                        <ul class="dropdown-menu dropdown-menu-center text-small" aria-labelledby="dropdownUser1">
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modal-login">Profile</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#" onclick="firebase.auth().signOut();">Sign out</a></li>
+                        </ul>
+                    </div>
+                    <div class="modal d-block1" id="modal-login" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content shadow">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Login</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="firebaseui-auth-container" class="guest"></div>
+                                    <div id="user-signed-in" class="d-none d-flex user">
+                                        <div class="flex-grow-1 d-flex justify-content-center">
+                                            <img th:src="@{/assets/avatar.jpg}" src="./assets/avatar.jpg" width="110px" height="110px" class="avatar rounded-circle">
+                                        </div>
+                                        <div class="flex-grow-1  d-flex flex-column align-self-center me-4">
+                                            <div id="name" class="align-self-center text-primary fs-5">Name</div>
+                                            <div id="email" class="align-self-center ">Email</div>
+                                            <div id="phone">Phone</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer d-none user">
+                                    <button id="sign-out" type="button" class="btn btn-danger" onclick="firebase.auth().signOut();">Sign out</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <%--            giang thêm id và formaction        --%>
                 </form>
+
             </div>
         </div>
     </nav>
@@ -631,6 +688,110 @@
 <script type="text/javascript" src="node_modules/mdbootstrap/js/mdb.min.js"></script>
 <script src="https://kit.fontawesome.com/cb0487757c.js" crossorigin="anonymous"></script>
 
+<%--giang--%>
+<script th:src="@{/js/main.js}" src="./js/main.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
+
+<script type="module">
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCCDuXhP2pXyKcS5s5JJE6fApDlKHoUZEI",
+        authDomain: "clothes-12f8a.firebaseapp.com",
+        projectId: "clothes-12f8a",
+        storageBucket: "clothes-12f8a.appspot.com",
+        messagingSenderId: "1068860917688",
+        appId: "1:1068860917688:web:3890226b6a54ea4b94f14d",
+        measurementId: "G-Y5LB0WWXV0"
+    };
+
+    // $(function () {
+    //     firebase.initializeApp(firebaseConfig);
+    //     alert(firebase.SDK_VERSION)
+    // });
+
+    // Initialize Firebase
+
+
+
+    var uiConfig = {
+        signInFlow: 'popup',
+        signInOptions: [
+            firebase.auth.EmailAuthProvider.PROVIDER_ID,
+            {
+                provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+                recaptchaParameters: {
+                    type: 'image',
+                    size: 'normal',
+                    badge: 'bottomleft'
+                },
+                defaultCountry: 'VN'
+            },
+            firebase.auth.FacebookAuthProvider.PROVIDER_ID
+        ],
+
+        callbacks: {
+            signInSuccessWithAuthResult: function (authResult) {
+                if (authResult.user) {
+                    handleSignedInUser(authResult.user);
+                }
+                return false;
+            },
+            signInFailure: function (error) {
+
+            }
+        },
+        autoUpgradeAnonymousUsers: true
+
+    };
+
+    //--------------
+
+
+    var ui
+
+    $(function () {
+        firebase.initializeApp(firebaseConfig);
+        ui = new firebaseui.auth.AuthUI(firebase.auth());
+        ui.start('#firebaseui-auth-container', uiConfig);
+        firebase.auth().onAuthStateChanged(function (user) {
+            user ? handleSignedInUser(user) : handleSignedOutUser();
+            $("#login-spinner").addClass("d-none")
+        });
+    });
+
+    function handleSignedInUser(user) {
+        $(".user").removeClass("d-none")
+        $(".guest").addClass("d-none")
+
+        $("#name").text(user.displayName);
+        $("#email").text(user.email);
+        $("#phone").text(user.phoneNumber);
+        if (user.photoURL) {
+            $(".avatar").attr("src",user.photoURL);
+        } else {
+            $(".avatar").attr("src","/assets/avatar.jpg");
+        }
+        $('#modal-login').modal('hide');
+    }
+
+    function handleSignedOutUser() {
+        ui.start("#firebaseui-auth-container", uiConfig);
+        $(".user").addClass("d-none")
+        $(".guest").removeClass("d-none")
+    }
+
+    // function handleSignedInUser(user) {
+    //     document.write("<pre>" + JSON.stringify(user, undefined, 2) + "</pre>")
+    // }
+
+
+
+</script>
+<%--giang--%>
 
 </body>
 </html>
